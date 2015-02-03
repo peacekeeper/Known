@@ -1,0 +1,20 @@
+Source: known
+Section: web
+Priority: extra
+Maintainer: Markus Sabadello <markus@projectdanube.org>
+Build-Depends: debhelper (>= 9)
+Standards-Version: 3.9.5
+Homepage: https://github.com/idno/Known
+
+Package: known
+Architecture: all
+Depends: apache2 | httpd,
+         php5 (>= 5.4),
+         php5-mysql,
+         mysql-server
+	 ${misc:Depends}
+Description: A simple, social publishing platform for your blog or website.
+ Known is an open publishing and collaboration platform that allows anyone
+ to share their stories using many types of media. Whether you are publishing
+ as a group, or just as an individual, Known allows you to post to a site that
+ you really own, while reaching your audience whever they might be.

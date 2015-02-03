@@ -1,0 +1,13 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: known
+Upstream-Contact: http://github.com/idno/Known/issues
+Source: http://github.com/idno/Known
+
+Files: *
+Copyright: 2015 Known, Inc. <hello@withknown.co> (http://withknown.com/)
+License: Expat
+
+Files: debian/*
+Copyright: 2015 Markus Sabadello <markus@projectdanube.org> (http://projectdanube.org/)
+License: Expat
+
