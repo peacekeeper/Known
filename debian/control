@@ -8,7 +8,7 @@ Homepage: https://github.com/idno/Known
 
 Package: known
 Architecture: all
-Depends: apache2 | httpd,
+Depends: apache2 (>= 2.4),
          php5 (>= 5.4),
          php5-mysql,
          mysql-server

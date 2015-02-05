@@ -1,1 +1,21 @@
-* usr/lib/known/
+# main application files
+index.php usr/share/known
+Idno usr/share/known
+IdnoPlugins usr/share/known
+
+# additional application files
+css usr/share/known
+gfx usr/share/known
+js usr/share/known
+external usr/share/known
+schema usr/share/known
+static usr/share/known
+templates usr/share/known
+Tests usr/share/known
+Themes usr/share/known
+warmup usr/share/known
+
+# Apache configuration
+htaccess*.dist etc/known
+debian/config/apache/known.conf      etc/apache2/conf-available
+

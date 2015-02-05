@@ -1,3 +1,9 @@
+known (0.7-2) UNRELEASED; urgency=medium
+
+  * Improving the control, links, install files
+
+ -- Markus Sabadello <markus@projectdanube.org>  Thu, 05 Feb 2015 19:58:19 +0100
+
 known (0.7-1) unstable; urgency=low
 
   * Initial release
