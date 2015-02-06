@@ -7,13 +7,38 @@ IdnoPlugins usr/share/known
 css usr/share/known
 gfx usr/share/known
 js usr/share/known
-external usr/share/known
 schemas usr/share/known
 statics usr/share/known
 templates usr/share/known
 Tests usr/share/known
 Themes usr/share/known
 warmup usr/share/known
+
+# external application files
+external/bonita usr/share/known/external
+external/bootstrap usr/share/known/external
+external/bootstrap-toggle usr/share/known/external
+external/fitvids usr/share/known/external
+#external/font-awesome usr/share/known/external
+external/fontello usr/share/known/external
+external/fragmention usr/share/known/external
+external/h5f usr/share/known/external
+#external/jquery usr/share/known/external
+external/jquery-pjax usr/share/known/external
+#external/jquery-timeago usr/share/known/external
+external/mediaelement usr/share/known/external
+external/mention usr/share/known/external
+external/mention-client-php usr/share/known/external
+external/mf2 usr/share/known/external
+external/MrClay_AutoP usr/share/known/external
+external/password_compat usr/share/known/external
+external/simplepie usr/share/known/external
+external/swiftmailer usr/share/known/external
+external/Symfony usr/share/known/external
+#external/tinymce usr/share/known/external
+external/torophp usr/share/known/external
+external/underscore usr/share/known/external
+external/webignition usr/share/known/external
 
 # Apache configuration
 htaccess*.dist etc/known

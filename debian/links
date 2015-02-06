@@ -1,2 +1,15 @@
-etc/known/htaccess-2.4.dist usr/share/known/.htaccess
+# Apache configuration
+etc/known/htaccess-2.4.dist		usr/share/known/.htaccess
+
+# Debian package libjs-jquery
+usr/share/javascript/jquery		usr/share/known/external/jquery
+
+# Debian package libjs-jquery-timeago
+usr/share/javascript/jquery-timeago	usr/share/known/external/jquery-timeago
+
+# Debian package fonts-font-awesome
+usr/share/fonts-font-awesome		usr/share/known/external/font-awesome
+
+# Debian package tinymce
+usr/share/tinymce/www			usr/share/known/external/tinymce/js/tinymce
 
