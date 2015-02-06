@@ -8,8 +8,8 @@ css usr/share/known
 gfx usr/share/known
 js usr/share/known
 external usr/share/known
-schema usr/share/known
-static usr/share/known
+schemas usr/share/known
+statics usr/share/known
 templates usr/share/known
 Tests usr/share/known
 Themes usr/share/known

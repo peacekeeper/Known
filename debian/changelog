@@ -1,6 +1,7 @@
-known (0.7-2) UNRELEASED; urgency=medium
+known (0.7-2) UNRELEASED; urgency=low
 
   * Improving the control, links, install files
+  * Fixed statics/ and schemas/ directories
 
  -- Markus Sabadello <markus@projectdanube.org>  Thu, 05 Feb 2015 19:58:19 +0100
 
