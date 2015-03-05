@@ -92,8 +92,6 @@
                 $this->template    = new Template();
                 $this->syndication = new Syndication();
                 $this->logging     = new Logging($this->config->log_level);
-                //$this->plugins      = new Plugins(); // This must be loaded last
-                //$this->themes       = new Themes();
                 $this->reader       = new Reader();
                 $this->helper_robot = new HelperRobot();
 
@@ -114,7 +112,6 @@
                     $this->config->known_hub != $this->config->url
                 ) {
                     site()->session()->hub_connect = time();
-                    \Idno\Core\site()->logging->log('Connecting to ' . $this->config->known_hub);
                     \Idno\Core\site()->known_hub = new \Idno\Core\Hub($this->config->known_hub);
                     \Idno\Core\site()->known_hub->connect();
                 }
@@ -506,12 +503,21 @@
             }
 
             /**
+             * Retrieves admins for this site
+             * @return array
+             */
+            function getAdmins()
+            {
+                return User::get(['admin' => true],[],9999);
+            }
+
+            /**
              * Retrieve this version of idno's version number
              * @return string
              */
             function version()
             {
-                return '0.7';
+                return '0.7.5';
             }
 
             /**

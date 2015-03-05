@@ -43,7 +43,18 @@
                 $opengraph['og:title']       = htmlspecialchars(strip_tags($vars['object']->getTitle()));
                 $opengraph['og:description'] = htmlspecialchars($vars['object']->getShortDescription());
                 $opengraph['og:type']        = htmlspecialchars($vars['object']->getActivityStreamsObjectType());
-                $opengraph['og:image']       = $owner->getIcon(); //Icon, for now set to being the author profile pic
+                $opengraph['og:image']       = $vars['object']->getIcon(); //$owner->getIcon(); //Icon, for now set to being the author profile pic
+
+                if ($icon = $vars['object']->getIcon()) {
+                    if ($icon_file = \Idno\Entities\File::getByURL($icon)) {
+                        if (!empty($icon_file->metadata['width'])) {
+                            $opengraph['og:image:width'] = $icon_file->metadata['width'];
+                        }
+                        if (!empty($icon_file->metadata['height'])) {
+                            $opengraph['og:image:height'] = $icon_file->metadata['height'];
+                        }
+                    }
+                }
 
                 if ($url = $vars['object']->getDisplayURL()) {
                     $opengraph['og:url'] = $vars['object']->getDisplayURL();
@@ -151,6 +162,11 @@
     <!-- Syndication -->
     <link href="<?=\Idno\Core\site()->config()->getDisplayURL()?>external/bootstrap-toggle/css/bootstrap2-toggle.min.css" rel="stylesheet" />
     <script src="<?=\Idno\Core\site()->config()->getDisplayURL()?>external/bootstrap-toggle/js/bootstrap2-toggle.js"></script>
+
+    <!-- Syntax highlighting -->
+    <link href="<?=\Idno\Core\site()->config()->getDisplayURL()?>external/highlight/styles/default.css" rel="stylesheet">
+    <script src="<?=\Idno\Core\site()->config()->getDisplayURL()?>external/highlight/highlight.pack.js"></script>
+    <script>hljs.initHighlightingOnLoad();</script>
 
     <?= $this->draw('shell/head', $vars); ?>
 
@@ -295,9 +311,22 @@
 <link rel="stylesheet"
       href="<?= \Idno\Core\site()->config()->getDisplayURL() ?>external/mediaelement/build/mediaelementplayer.css"/>
 
-<!-- WYSIWYG editor -->
-<script src="<?= \Idno\Core\site()->config()->getDisplayURL() ?>external/tinymce/js/tinymce/tinymce.min.js" type="text/javascript"></script>
-<script src="<?= \Idno\Core\site()->config()->getDisplayURL() ?>external/tinymce/js/tinymce/jquery.tinymce.min.js" type="text/javascript"></script>
+<?php
+
+    if (\Idno\Core\site()->session()->isLoggedIn()) {
+
+        ?>
+        <!-- WYSIWYG editor -->
+        <script src="<?= \Idno\Core\site()->config()->getDisplayURL() ?>external/tinymce/js/tinymce/tinymce.min.js"
+                type="text/javascript"></script>
+        <script
+            src="<?= \Idno\Core\site()->config()->getDisplayURL() ?>external/tinymce/js/tinymce/jquery.tinymce.min.js"
+            type="text/javascript"></script>
+    <?php
+
+    }
+
+?>
 
 <!-- Mention styles -->
 <link rel="stylesheet" type="text/css"

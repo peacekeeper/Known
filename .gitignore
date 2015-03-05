@@ -10,7 +10,7 @@ Idno/.idea/.name
 /nbproject/private/
 /.htaccess
 /doc/output/
-/Uploads
+/Uploads/*
 
 /.DS_Store
 /*/.DS_Store
@@ -31,7 +31,13 @@ IdnoPlugins/FooterJS/
 IdnoPlugins/Google/
 IdnoPlugins/IndiePub/
 IdnoPlugins/StaticPages/
+IdnoPlugins/Markdown/
+IdnoPlugins/ApplyToJoin/
 
 error_log
 
 configbackup.ini
+
+# Allow these previously excluded files
+!/external/fontello/config.json
+!/Uploads/readme.txt
