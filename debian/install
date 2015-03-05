@@ -42,5 +42,5 @@ external/webignition usr/share/known/external
 
 # Apache configuration
 htaccess*.dist etc/known
-debian/config/apache/known.conf      etc/apache2/conf-available
+debian/config/apache/known.conf      etc/apache2/sites-available
 

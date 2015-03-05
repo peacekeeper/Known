@@ -41,17 +41,17 @@ fix_file_permissions()
 
 case "$1" in
     configure)
-	CONF="known"
+	SITE="known"
 	COMMON_STATE=$(dpkg-query -f '${Status}' -W 'apache2.2-common' 2>/dev/null | awk '{print $3}' || true)
 	if [ -e /usr/share/apache2/apache2-maintscript-helper ] ; then
 		. /usr/share/apache2/apache2-maintscript-helper
 		apache2_invoke enmod rewrite
-		if [ -e /etc/apache2/conf-available/$CONF.conf ] ; then
-			apache2_invoke enconf $CONF || exit $?
+		if [ -e /etc/apache2/sites-available/$SITE.conf ] ; then
+			apache2_invoke ensite $SITE || exit $?
 		fi
 	elif [ "$COMMON_STATE" = "installed" ] || [ "$COMMON_STATE" = "unpacked" ] ; then
-		if [ -d /etc/apache2/conf.d/ ] && [ ! -L /etc/apache2/conf.d/$CONF.conf ] ; then
-			ln -s ../conf-available/$CONF.conf /etc/apache2/conf.d/$CONF.conf
+		if [ -d /etc/apache2/conf.d/ ] && [ ! -L /etc/apache2/conf.d/$SITE.conf ] ; then
+			ln -s ../sites-available/$SITE.conf /etc/apache2/conf.d/$SITE.conf
 		fi
 		# Test whether a2enmod is available (and thus also apache2ctl).
 		if [ -x /usr/sbin/a2enmod ]; then

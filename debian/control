@@ -11,6 +11,8 @@ Architecture: all
 Depends: apache2 (>= 2.4) | httpd,
          php5 (>= 5.4),
          php5-mysql,
+         php5-curl,
+         php5-gd,
          mysql-server,
          libjs-jquery,
          libjs-jquery-timeago,

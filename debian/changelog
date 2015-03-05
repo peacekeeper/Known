@@ -1,3 +1,11 @@
+known (0.7-3) UNRELEASED; urgency=low
+
+  * Updated Apache configuration to use site instead of conf.
+  * Added dependencies php5-gd and php5-curl.
+  * Added postrm script.
+
+ -- Markus Sabadello <markus@projectdanube.org>  Thu, 05 Mar 2015 16:07:31 +0100
+
 known (0.7-2) UNRELEASED; urgency=low
 
   * Improving the control, links, install files
