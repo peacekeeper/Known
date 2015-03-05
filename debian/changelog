@@ -1,3 +1,9 @@
+known (0.7.5-1) UNRELEASED; urgency=low
+
+  * New upstream version 0.7.5.
+
+ -- Markus Sabadello <markus@projectdanube.org>  Thu, 05 Mar 2015 16:55:42 +0100
+
 known (0.7-3) UNRELEASED; urgency=low
 
   * Updated Apache configuration to use site instead of conf.
