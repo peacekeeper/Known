@@ -348,6 +348,7 @@
                 $activityStreamPost->setTitle(sprintf($title, $owner->getTitle(), $this->getTitle()));
                 $activityStreamPost->setVerb('post');
                 $activityStreamPost->setObject($this);
+                $activityStreamPost->created = $this->created;
 
                 return $activityStreamPost->save();
             }
@@ -414,9 +415,12 @@
             /**
              * Saves this entity - either creating a new entry, or
              * overwriting the existing one.
+             *
+             * @param bool $add_to_feed If set to true, will add this item to the activity stream feed if this object is being newly created
+             * @param string $feed_verb If this item is added to the feed, this is the verb that will be used
              */
 
-            function save()
+            function save($add_to_feed = false, $feed_verb = 'post')
             {
 
                 // Adding this entity's owner (if we don't know already)
@@ -471,6 +475,9 @@
                         $this->_id  = $result;
                         $this->uuid = $this->getUUID();
                         \Idno\Core\site()->db()->saveObject($this);
+                        if ($add_to_feed) {
+                            $this->addToFeed($feed_verb);
+                        }
                         $this->syndicate();
                         $event = new \Idno\Core\Event(array('object' => $this));
                         \Idno\Core\site()->events()->dispatch('saved', $event);
@@ -640,7 +647,7 @@
 
             function getActivityStreamsObjectType()
             {
-                return 'article';
+                return 'entity';
             }
 
             /**
@@ -767,6 +774,21 @@
             function getID()
             {
                 return $this->_id;
+            }
+
+            /**
+             * Retrieves an icon for this entity
+             * @return mixed|string
+             */
+            function getIcon()
+            {
+                if ($user = $this->getOwner()) {
+                    return $user->getIcon();
+                }
+                if ($page = \Idno\Core\site()->currentPage()) {
+                    return $page->getIcon();
+                }
+                return \Idno\Core\site()->config()->getDisplayURL() . 'gfx/logos/logo_k.png';
             }
 
             /**
@@ -1712,10 +1734,12 @@
                 if (empty($annotation_url)) {
                     $annotation_url = $this->getURL() . '/annotations/' . md5(time() . $content); // Invent a URL for this annotation
                 }
+                $post_existed = false;
                 if ($existing_annotations = $this->getAnnotations($subtype)) {
                     foreach ($existing_annotations as $existing_local_url => $existing_annotation) {
                         if ($existing_annotation['permalink'] == $annotation_url) {
                             $local_url = $existing_local_url;
+                            $post_existed = true;
                         }
                     }
                 }
@@ -1789,7 +1813,7 @@
                                 break;
                         }
 
-                        if ($annotation['owner_url'] != $this->getOwner()->getURL() && $send == true) {
+                        if ($annotation['owner_url'] != $this->getOwner()->getURL() && $send == true && $post_existed == false) {
                             if (empty($subject)) {
                                 $subject = '';
                             }

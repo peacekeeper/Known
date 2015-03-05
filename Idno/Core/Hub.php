@@ -57,7 +57,7 @@
                 }
 
                 $server = str_replace($urischeme . ':', $newuri, $server);*/
-                site()->logging()->log('Saved connection to hub ' . $server);
+                //site()->logging()->log('Saved connection to hub ' . $server);
                 $this->server = $server;
             }
 
@@ -102,12 +102,11 @@
 
                 // If we have details, and we're logged in, connect
                 if (site()->session()->isLoggedOn()) {
-                    \Idno\Core\site()->logging->log("User is logged on, checking hub status");
                     if (!empty($details)) {
                         try {
-                            if (!$this->userIsRegistered()) {
-                                \Idno\Core\site()->logging->log("User isn't registered; registering ...");
-                                $this->registerUser();
+                            if (!$this->userIsRegistered(site()->session()->currentUser())) {
+                                \Idno\Core\site()->logging->log("User isn't registered on hub; registering ...");
+                                $this->registerUser(site()->session()->currentUser());
                             }
                         } catch (\Exception $e) {
                             \Idno\Core\site()->logging->log($e->getMessage());
@@ -293,7 +292,7 @@
                 site()->session()->refreshSessionUser($user);
 
                 if ($this->userIsRegistered($user)) {
-                    $results = $this->makeCall('hub/user/link', array('user' => $user->getUUID(), 'endpoint' => $endpoint, 'callback' => $callback));
+                    /*$results = $this->makeCall('hub/user/link', array('user' => $user->getUUID(), 'endpoint' => $endpoint, 'callback' => $callback));
                     if (!empty($results['content'])) {
                         $content = json_decode($results['content'], true);
                     }
@@ -303,6 +302,12 @@
                         $signature  = hash_hmac('sha1', $link_token . $time, $user->hub_settings['secret']);
 
                         return $this->server . $endpoint . '?token=' . urlencode($link_token) . '&time=' . $time . '&signature=' . $signature;
+                    }*/
+
+                    if (!empty($user->hub_settings['token'])) {
+                        $time = time();
+                        $signature  = hash_hmac('sha1', $user->hub_settings['token'] . $time, $user->hub_settings['secret']);
+                        return $this->server . $endpoint . '?token=' . urlencode($user->hub_settings['token']) . '&time=' . $time . '&signature=' . $signature;
                     }
                 }
 

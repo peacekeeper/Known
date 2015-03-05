@@ -450,6 +450,7 @@
                     $output = '';
                     if ($response = $statement->execute()) {
                         while ($object = $statement->fetch(\PDO::FETCH_ASSOC)) {
+                            $uuid = $object['uuid'];
                             $fields = array_keys($object);
                             $fields = array_map(function($v) { return '`' . $v . '`'; }, $fields);
                             $object = array_map(function($v) { return \Idno\Core\site()->db()->getClient()->quote($v); }, $object);
@@ -458,7 +459,25 @@
                             $line .= ' values ';
                             $line .= '(' . implode(',', $object) . ');';
                             $output .= $line . "\n";
-
+                            $metadata_statement = $client->prepare("select * from metadata where `entity` = :uuid");
+                            if ($metadata_response = $metadata_statement->execute([':uuid' => $uuid])) {
+                                while ($object = $metadata_statement->fetch(\PDO::FETCH_ASSOC)) {
+                                    $fields = array_keys($object);
+                                    $fields = array_map(function($v) { return '`' . $v . '`'; }, $fields);
+                                    $object = array_map(function($v) { return \Idno\Core\site()->db()->getClient()->quote($v); }, $object);
+                                    $line = 'insert into metadata ';
+                                    $line .= '(' . implode(',',$fields) . ')';
+                                    $line .= ' values ';
+                                    $line .= '(' . implode(',', $object) . ');';
+                                    $output .= $line . "\n";
+                                }
+                                unset($metadata_statement);
+                                gc_collect_cycles();    // Clean memory
+                            }
+                            $output .= "\n";
+                            unset($object);
+                            unset($fields);
+                            gc_collect_cycles();    // Clean memory
                         }
                     }
                     return $output;

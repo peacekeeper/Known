@@ -20,6 +20,9 @@
             // We'll keep track of prepended templates here
             public $prepends = array();
 
+            // We'll keep track of replaced templates here
+            public $replacements = array();
+
             // We can also extend templates with HTML or other content
             public $rendered_extensions = array();
 
@@ -39,10 +42,11 @@
              * Extension-aware version of the template drawing function
              *
              * @param string $templateName
-             * @param bool $returnBlank
+             * @param bool $returnBlank Should we return a blank string if the template doesn't exist? (Defaults to true)
+             * @param book $replacements Should we honor template replacements? (Defaults to true)
              * @return \Bonita\false|string
              */
-            function draw($templateName, $returnBlank = true)
+            function draw($templateName, $returnBlank = true, $replacements = true)
             {
                 $result = '';
                 if (!empty($this->prepends[$templateName])) {
@@ -50,7 +54,11 @@
                         $result .= parent::draw($template, $returnBlank);
                     }
                 }
-                $result .= parent::draw($templateName, $returnBlank);
+                if (!empty($this->replacements[$templateName]) && $replacements == true) {
+                    $result .= parent::draw($this->replacements[$templateName], $returnBlank);
+                } else {
+                    $result .= parent::draw($templateName, $returnBlank);
+                }
                 if (!empty($this->extensions[$templateName])) {
                     foreach ($this->extensions[$templateName] as $template) {
                         $result .= parent::draw($template, $returnBlank);
@@ -156,6 +164,26 @@
             }
 
             /**
+             * Replace a core template with another template. eg, template "plugin/atemplate"
+             * could replace "core/atemplate"; if this is the case, the results of
+             * $template->draw('plugin/atemplate') will be displayed instead of
+             * $template->draw('core/atemplate'). Usually this isn't required - Known replaces
+             * templates automatically if you create one in your plugin with the same name -
+             * but this function enables conditional replacements.
+             *
+             * @param string $templateName
+             * @param string $extensionTemplateName
+             * @param bool $to_front If set, this will add the template to the beginning of the template queue
+             */
+            function replaceTemplate($templateName, $replacementTemplateName)
+            {
+                if (empty($this->replacements[$templateName])) {
+                    $this->replacements[$templateName] = array();
+                }
+                $this->replacements[$templateName] = $replacementTemplateName;
+            }
+
+            /**
              * Extends a given template with pre-rendered content. All pre-rendered content will be drawn after
              * template-driven content.
              * @param $templateName
@@ -177,6 +205,7 @@
              */
             function autop($html)
             {
+                $html = site()->triggerEvent('text/format', [], $html);
                 require_once dirname(dirname(dirname(__FILE__))) . '/external/MrClay_AutoP/AutoP.php';
                 $autop = new \MrClay_AutoP();
                 
@@ -240,6 +269,10 @@
                     $url = $matches[1];
                     $tag = str_replace('#','',$matches[1]);
 
+                    if (preg_match('/\#[A-Fa-f0-9]{6}/', $matches[1])) {
+                        return $matches[1];
+                    }
+
                     return '<a href="' . \Idno\Core\site()->config()->getDisplayURL() . 'tag/' . urlencode($tag) . '" class="p-category" rel="tag">' . $url . '</a>';
                 }, $text);
 
@@ -261,7 +294,8 @@
                     substr($url, 0, 4) == 'tel:' ||
                     substr($url, 0, 4) == 'sms:' ||
                     substr($url, 0, 6) == 'skype:' ||
-                    substr($url, 0, 5) == 'xmpp:'
+                    substr($url, 0, 5) == 'xmpp:' ||
+                    substr($url, 0, 5) == 'facetime:'
                 )
                     ? $url
                     : 'http://' . $url;

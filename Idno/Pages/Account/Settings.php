@@ -52,6 +52,7 @@
 
                 if (!empty($password)) {
                     if (\Idno\Entities\User::checkNewPasswordStrength($password)) {
+                        \Idno\Core\site()->session()->addMessage("Your password has been updated.");
                         $user->setPassword($password);
                     } else {
                         \Idno\Core\site()->session()->addErrorMessage('Sorry, your password is too weak');
@@ -59,7 +60,6 @@
                 }
 
                 if ($user->save()) {
-                    \Idno\Core\site()->session()->refreshSessionUser($user);
                     \Idno\Core\site()->session()->addMessage("Your details were saved.");
                 }
                 $this->forward($_SERVER['HTTP_REFERER']);
